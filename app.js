@@ -47,6 +47,7 @@ const corsOptions = {
 
   credentials: true,
 }
+//Quick comment to test git and github
 */
 //App config
 //app.use(cors(corsOptions));
