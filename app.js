@@ -14,7 +14,7 @@ const express = require("express"),
 	  db = require("./models"),
 	  errorHandler = require('./utils/error'), // Updated for error POC
 	  expressError = require('./utils/ExpressError'),
-	  PORT = process.env.PORT || 3000;
+	  PORT = process.env.PORT || 3001;
 
 	  
 
