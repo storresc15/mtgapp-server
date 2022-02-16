@@ -29,6 +29,7 @@ module.exports.postDeck = async(req, res) => {
 	console.log(req.body.description);
 	console.log(req.body.likes);
 	//console.log(req.user._id);
+	const id = req.user._id;
 	if(!req.body.name) {
 		res.send('Sorry no arguments made it')
 	} else{
@@ -36,15 +37,16 @@ module.exports.postDeck = async(req, res) => {
 		name: req.body.name,
 		description: req.body.description,
 		likes: req.body.likes,
-		user: req.user._id, // Check this one out
+		user: id, // Check this one out
 		public: req.body.public,
 		cards: [],
 		sideDecks: []
 	});
 	await addedDeck.save(function(err) {
-		if(err) res.send('There was an error!')
+		if(err) res.send('There was an error!') //Update with error
 	})
-	res.send('Saved the Deck: Well done!')
+	const theDecks = await db.Deck.find({user:id});
+	res.send(theDecks); //updated with the new values to populate FE
 	}
 }
 
@@ -67,28 +69,11 @@ module.exports.updateDeck = async(req, res) => {
 module.exports.getCardsFromDeck = async(req, res) => {
 	console.log('name: ' + req.params.id);
 	const { id } = req.params;
-	const deckFound = await db.Deck.findOne({_id:id});
-	console.log(deckFound);
+	const deckFound = await db.Deck.findOne({_id:id}).populate('cards');
+	//console.log(deckFound);
 	const products = deckFound.cards;
-	console.log(products);
-	let cards = [];
 	
-	for(let i in products) {
-		let item = await db.Card.findOne({_id:products[i]});
-		//console.log(item.name);
-		//let cardName = item.name;
-		if(item) {
-		cards.push({
-			"name" : item.name,
-			"colors" : item.colors,
-			"type" : item.type,
-			"imgUrl" : item.image,
-			"multiverseid" : item.multiverseid
-		})
-	}
-	}
-	//res.send(JSON.stringify(products, null, 2));
-	res.send(JSON.stringify(cards));
+	res.send(JSON.stringify(products));
 }
 
 module.exports.postCardToDeck = async(req, res, next) => {
@@ -113,13 +98,13 @@ module.exports.postCardToDeck = async(req, res, next) => {
 	if(cardNumber >= 4) {
 		console.log('Have already reached 4 cards, cannot add more')
 		//Add error message here
-		let err = new expressError('You have already reached 4 cards limit in deck, cannot add more', 401);
+		let err = new expressError('You have already reached the same cards limit in deck(4), cannot add more of the same card', 401);
 		next(err);
 		//res.end();
 	}else {
 		deck.cards.push(card);
 		await deck.save();
-		res.send(JSON.stringify(deck));
+		res.send(JSON.stringify(deck.cards));
 	}
 	
 }
