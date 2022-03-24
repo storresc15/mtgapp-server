@@ -117,6 +117,7 @@ module.exports.refreshToken =  (req, res, next) => {
 //Signup Route for users
 module.exports.signup = (req, res, next) => {
   // Verify that first name is not empty
+	console.log('Is this function even called?')
   if (!req.body.firstName) {
     res.statusCode = 500
     res.send({
@@ -129,6 +130,7 @@ module.exports.signup = (req, res, next) => {
       req.body.password,
       (err, user) => {
         if (err) {
+		console.log('This is the error: ' + err)	
           res.statusCode = 500
           res.send(err)
         } else {
@@ -140,6 +142,7 @@ module.exports.signup = (req, res, next) => {
           user.refreshToken.push({ refreshToken })
           user.save((err, user) => {
             if (err) {
+			console.log('This is the error in line 144: ' + err)	
               res.statusCode = 500
               res.send(err)
             } else {

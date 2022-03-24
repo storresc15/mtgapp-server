@@ -31,14 +31,14 @@ exports.verifyUser = passport.authenticate("jwt", { session: false })
 
 
 exports.isAuthor = async (req, res, next) => {
-    const { id } = req.params;
-   /* const blog = await db.FamilyBlog.findById(id);
-    if (!blog.author.equals(req.user._id)) {
+    const { id } = req.params.reviewId;
+    const review = await db.Review.findById(id);
+    if (!blog.user.equals(req.user._id)) {
         //req.flash('error', 'You do not have permission to do that!');
         //return res.redirect(`/campgrounds/${id}`);
 		throw new ExpressError('You do not have the required permission to do this', 400);
     }
-    next(); */
+    next(); 
 }
 
 exports.isDeckOwner = async (req, res, next) => {

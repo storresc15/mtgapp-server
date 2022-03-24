@@ -13,7 +13,18 @@ const cardSchema = new Schema({
 		ref: 'Deck'
 		//requires: true
 	},
-	multiverseid : String
+	multiverseid : String,
+	description: String,
+	supertypes: [{
+		type: String
+	}],
+	types: [{
+		type: String
+	}],
+	rarity: String,
+	manaCost: String
+	
+	
 })
 
 const Card = mongoose.model('Card', cardSchema);

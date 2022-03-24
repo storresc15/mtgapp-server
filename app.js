@@ -25,7 +25,8 @@ require("./middleware")
 const userRoutes = require('./routes/users'),
 	  cardRoutes = require('./routes/cards'),
 	  setRoutes = require('./routes/sets'),
-	  deckRoutes = require('./routes/decks');
+	  deckRoutes = require('./routes/decks'),
+	  reviewRoutes = require('./routes/reviews');
 const app = express();
 app.use(morgan('tiny'));
 app.use(bodyParser.json()); // for parsing application/json

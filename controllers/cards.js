@@ -53,7 +53,11 @@ module.exports.searchByName = async(req, res) => {
 			"type" : item.type,
 			"imgUrl" : item.imageUrl,
 			"id" : item.multiverseid,
-			"description" : item.text
+			"description" : item.text,
+			"supertypes" : item.supertypes,
+			"types" : item.types,
+			"rarity" : item.rarity,
+			"manaCost" : item.manaCost	
 		})
 			
 		}

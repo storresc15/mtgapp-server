@@ -11,16 +11,22 @@ router.route('/')
 router.get('/mydecks',verifyUser, decks.getByUserId)
 
 //Route to get all the decks
-router.get('/all',verifyUser, decks.getAll)
+router.get('/alldecks',verifyUser, decks.getAll)
 
 //Route to get the actual deck
 router.route('/:id')
 	.get(verifyUser, decks.getById)
 	.post(verifyUser,isDeckOwner, decks.updateDeck)
+	.delete(verifyUser,isDeckOwner, decks.deleteDeck)
+
 
 router.route('/:id/cards')
 	.get(verifyUser, decks.getCardsFromDeck)
 	.post(verifyUser,isDeckOwner, decks.postCardToDeck)
+	.delete(verifyUser, isDeckOwner, decks.removeCards)
+
+router.post('/:id/cards/remove',verifyUser, isDeckOwner, decks.removeCards)
+
 
 
 module.exports = router;
