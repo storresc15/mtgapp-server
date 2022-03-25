@@ -74,7 +74,7 @@ module.exports.getCardsFromDeck = async (req, res) => {
   const deckFound = await db.Deck.findOne({ _id: id }).populate('cards');
   //console.log(deckFound);
   const products = deckFound.cards;
-  let cards = filterDeck(products); //[];
+  let cards = filterDeck(products);
 
   res.send(JSON.stringify(cards));
 };
