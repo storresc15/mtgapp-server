@@ -6,39 +6,42 @@ const passportLocalMongoose = require('passport-local-mongoose');
 const Session = new Schema({
   refreshToken: {
     type: String,
-    default: "",
-  },
-})
-
-const UserSchema = new mongoose.Schema({
-	firstName: {
-		type: String,
-		default: "",
-  	},
-	lastName: {
-		type: String,
-		default: "",
-	 },
-	email: {
-      type: String,
-      unique: true
-    },
-    profileImageUrl: {
-      type:String,
-    },
-    decks: [{
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'Deck'
-    }],
-	authStrategy: {
-		type: String,
-		default: "local",
-  },
-	refreshToken: {
-    	type: [Session],
-  },
+    default: ''
+  }
 });
 
+//User shcema
+
+const UserSchema = new mongoose.Schema({
+  firstName: {
+    type: String,
+    default: ''
+  },
+  lastName: {
+    type: String,
+    default: ''
+  },
+  email: {
+    type: String,
+    unique: true
+  },
+  profileImageUrl: {
+    type: String
+  },
+  decks: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Deck'
+    }
+  ],
+  authStrategy: {
+    type: String,
+    default: 'local'
+  },
+  refreshToken: {
+    type: [Session]
+  }
+});
 
 /* ----TO BE IMPLEMENTED THE BELOW CODE FOR AUTHORIZATION 
 userSchema.pre('save', function(next){
@@ -61,12 +64,12 @@ userSchema.methods.comparePassword = function(candidatePassword, next) {
 */
 
 //Remove refreshToken from the response
-UserSchema.set("toJSON", {
+UserSchema.set('toJSON', {
   transform: function (doc, ret, options) {
-    delete ret.refreshToken
-    return ret
-  },
-})
+    delete ret.refreshToken;
+    return ret;
+  }
+});
 
 UserSchema.plugin(passportLocalMongoose);
 
