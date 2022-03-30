@@ -79,6 +79,16 @@ module.exports.getCardsFromDeck = async (req, res) => {
   res.send(JSON.stringify(cards));
 };
 
+module.exports.getSideDecksFromDeck = async (req, res) => {
+  //console.log('name: ' + req.params.id);
+  const { id } = req.params;
+  const deckFound = await db.Deck.findOne({ _id: id }).populate('sideDecks');
+  //console.log(deckFound);
+  const products = deckFound.sideDecks;
+
+  res.send(JSON.stringify(products));
+};
+
 module.exports.postCardToDeck = async (req, res, next) => {
   //console.log('Adding the following card: ' + req.body);
   const { id } = req.params;
