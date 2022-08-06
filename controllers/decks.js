@@ -6,12 +6,14 @@ module.exports.index = (req, res) => {
   res.send('Welcome to the decks route!!');
 };
 
+//Get Deck by ID
 module.exports.getById = async (req, res) => {
   const id = req.params.id;
   const theDeck = await db.Deck.find({ _id: id });
   res.send(theDeck);
 };
 
+//Get decks by User Id
 module.exports.getByUserId = async (req, res) => {
   const id = req.user._id;
   const theDecks = await db.Deck.find({ user: id }).populate('user');
