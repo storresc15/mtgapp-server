@@ -12,12 +12,14 @@ module.exports.getByMUID = async (req, res) => {
   res.send(JSON.stringify(card));
 };
 
+//Get all cards from MTG
 module.exports.getAllCards = async (req, res) => {
   const allCards = await db.Card.find({});
 
   res.send(JSON.stringify(allCards));
 };
 
+//Add cards to DB
 module.exports.addCardToDB = async (req, res) => {
   console.log('name: ' + req.params.name);
   const { name } = req.params;
