@@ -8,6 +8,7 @@ module.exports.getById = async (req, res) => {
   res.send(sideDeck);
 };
 
+//Create a side deck function
 module.exports.createSideDeck = async (req, res) => {
   const id = req.user._id;
   if (!req.body.name) {
