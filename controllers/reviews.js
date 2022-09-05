@@ -6,7 +6,7 @@ module.exports.getDeckReviews = async(req, res) => {
 	
 	res.send(JSON.stringify(reviews));
 }
-
+//Create review
 module.exports.createReview = async (req, res) => {
     const deck = await db.Deck.findById(req.params.id);
     const review = new db.Review();
