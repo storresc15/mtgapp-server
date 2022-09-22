@@ -21,9 +21,7 @@ module.exports.getAllCards = async (req, res) => {
 
 //Add cards to DB
 module.exports.addCardToDB = async (req, res) => {
-  console.log('name: ' + req.params.name);
   const { name } = req.params;
-  console.log(name);
   const product = await mtg.card.where({ name: name });
   const prodname = product[0]['name'];
   const colors = product[0]['colors'];
@@ -44,9 +42,7 @@ module.exports.addCardToDB = async (req, res) => {
 };
 
 module.exports.searchByName = async (req, res) => {
-  console.log('name: ' + req.params.name);
   const { name } = req.params;
-  console.log(name);
   const products = await mtg.card.where({ name: name });
 
   let cards = [];
