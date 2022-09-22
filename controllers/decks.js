@@ -26,11 +26,6 @@ module.exports.getAll = async (req, res) => {
 };
 
 module.exports.postDeck = async (req, res) => {
-  console.log(req.body);
-  console.log(req.body.name);
-  console.log(req.body.description);
-  console.log(req.body.likes);
-  //console.log(req.user._id);
   const id = req.user._id;
   if (!req.body.name) {
     res.send('Sorry no arguments made it');
@@ -64,7 +59,6 @@ module.exports.updateDeck = async (req, res) => {
     (deck.likes = req.body.likes),
     (deck.public = req.body.public),
     await deck.save();
-  console.log(deck);
 
   const theDecks = await db.Deck.find({ user: userId });
   res.send(theDecks); //updated with the new values to populate FE
@@ -92,68 +86,14 @@ module.exports.getSideDecksFromDeck = async (req, res) => {
 };
 
 module.exports.postCardToDeck = async (req, res, next) => {
-  //console.log('Adding the following card: ' + req.body);
   const { id } = req.params;
-  const deck = await db.Deck.findOne({ _id: id }).populate('cards');
-  let card = await db.Card.findOne({ multiverseid: req.body.multiverseid });
-  console.log('found card?? ' + card);
-  if (!card) {
-    card = new db.Card({
-      name: req.body.name,
-      colors: req.body.colors,
-      type: req.body.type,
-      image: req.body.image,
-      multiverseid: req.body.multiverseid,
-      description: req.body.description,
-      supertypes: req.body.supertypes,
-      types: req.body.types,
-      rarity: req.body.rarity,
-      manaCost: req.body.manaCost
-    });
-    await card.save(function (err) {
-      if (err) res.send('There was an error');
-    });
-    //await card.save();
-    console.log('SAVED THIS CARD TO CARDS TABLE: ' + card);
-  }
-  //POC for 60 card limit
-  let limit = deck.cards.length;
-  console.log('The Length of the cards array: ' + limit);
-  if (limit >= 60) {
-    console.log('Have already reached 60 cards, cannot add more');
-    //Add error message here
-    let err = new expressError(
-      'You have already reached the deck card limit (60). Cannot add more cards!',
-      401
-    );
-    next(err);
-    //res.end();
-  }
+  const deck = res.locals.deck; //await db.Deck.findOne({ _id: id }).populate('cards');
+  let card = res.locals.card; //await db.Card.findOne({ multiverseid: req.body.multiverseid });
 
-  //POC For Limiting the number of cards to 4 each in each deck
-  let cardNumber = deck.cards.filter(
-    (x) =>
-      x.name === card.name &&
-      !x.supertypes.includes('Basic') &&
-      !x.types.includes('Land')
-  ).length;
-  console.log('Have found this number of the card: ' + cardNumber);
-  //
-  if (cardNumber >= 4) {
-    console.log('Have already reached 4 cards, cannot add more');
-    //Add error message here
-    let err = new expressError(
-      'You have already reached the same cards limit in deck(4), cannot add more of the same card',
-      401
-    );
-    next(err);
-    //res.end();
-  } else {
-    deck.cards.push(card);
-    await deck.save();
-    let cards = filterDeck(deck.cards);
-    res.send(JSON.stringify(cards));
-  }
+  deck.cards.push(card);
+  await deck.save();
+  let cards = filterDeck(deck.cards);
+  res.send(JSON.stringify(cards));
 };
 
 module.exports.updateCards = async (req, res, next) => {
@@ -172,13 +112,6 @@ module.exports.removeCards = async (req, res, next) => {
   const deck = await db.Deck.findOne({ _id: id }).populate('cards');
 
   const cards = deck.cards;
-
-  console.log('-----------------------------------------');
-  console.log('Is there an actual body: ' + req.body);
-  console.log('The name of the card to be removed: ' + req.body.name);
-  console.log('The Count to be removed: ' + req.body.count);
-
-  console.log('-----------------------------------------');
 
   const removed = removeCardsFromDeck(cards, req.body.name, req.body.count);
 
@@ -249,12 +182,9 @@ const removeCardsFromDeck = (cards, name, count) => {
 
   while (count > 0) {
     let idx = removed.findIndex((p) => p.name == name);
-    console.log('Removing: ' + name);
     removed.splice(idx, 1);
     count--;
   }
-
-  console.log('Cars: ' + removed);
 
   return removed;
 };

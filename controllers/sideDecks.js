@@ -59,15 +59,12 @@ module.exports.postCardToDeck = async (req, res, next) => {
     await card.save(function (err) {
       if (err) res.send('There was an error');
     });
-    console.log('SAVED THIS CARD TO CARDS TABLE: ' + card);
   }
 
-  //POC For Limiting the number of cards to 4 each in each deck
+  //For Limiting the number of cards to 4 each in each deck
   let cardNumber = deck.cards.filter((x) => x.name === card.name).length;
-  console.log('Have found this number of the card: ' + cardNumber);
   //
   if (cardNumber >= 4) {
-    console.log('Have already reached 4 cards, cannot add more');
     //Add error message here
     let err = new expressError(
       'You have already reached the same cards limit in deck(4), cannot add more of the same card',

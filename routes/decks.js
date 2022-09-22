@@ -1,7 +1,12 @@
 const express = require('express'),
   router = express.Router(),
   decks = require('../controllers/decks'),
-  { verifyUser, isAuthor, isDeckOwner } = require('../middleware');
+  {
+    verifyUser,
+    isAuthor,
+    isDeckOwner,
+    verifyDeckRules
+  } = require('../middleware');
 
 router.route('/').get(decks.index).post(verifyUser, decks.postDeck);
 
@@ -21,7 +26,7 @@ router
 router
   .route('/:id/cards')
   .get(verifyUser, decks.getCardsFromDeck)
-  .post(verifyUser, isDeckOwner, decks.postCardToDeck)
+  .post(verifyUser, isDeckOwner, verifyDeckRules, decks.postCardToDeck)
   .delete(verifyUser, isDeckOwner, decks.removeCards);
 
 router.get('/:id/sidedecks', verifyUser, decks.getSideDecksFromDeck);
