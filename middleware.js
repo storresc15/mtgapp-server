@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken');
 const dev = process.env.NODE_ENV !== 'production';
 const db = require('./models');
 const expressError = require('./utils/ExpressError');
+const config = require('./config/config');
 
 exports.COOKIE_OPTIONS = {
   httpOnly: true,
@@ -94,20 +95,41 @@ exports.verifyDeckRules = async (req, res, next) => {
       !x.supertypes.includes('Basic') &&
       !x.types.includes('Land')
   ).length;
-  //60 card limit
-  if (limit >= 60) {
+  //Setting rules
+  let cardLimit = 0;
+  let singleCardLimit = 0;
+
+  switch (deck.format) {
+    case 'standard':
+      cardLimit = config.deckRules.totalCardLimit.standard;
+      singleCardLimit = config.deckRules.singleCardLimit.standard;
+      break;
+    case 'modern':
+      cardLimit = config.deckRules.totalCardLimit.modern;
+      singleCardLimit = config.deckRules.singleCardLimit.modern;
+      break;
+    case 'commander':
+      cardLimit = config.deckRules.totalCardLimit.commander;
+      singleCardLimit = config.deckRules.singleCardLimit.commander;
+      break;
+    default:
+      cardLimit = config.deckRules.totalCardLimit.standard;
+      singleCardLimit = config.deckRules.singleCardLimit.standard;
+  }
+  //Card limit
+  if (limit >= cardLimit) {
     //Add error message here
     const err = new expressError(
-      'You have already reached the deck card limit (60). Cannot add more cards!',
+      `You have already reached the deck card limit of ${cardLimit} cards. Cannot add more cards!`,
       401
     );
     next(err);
     //res.end();
-  } else if (cardNumber >= 4) {
+  } else if (cardNumber >= singleCardLimit) {
     //Limiting the number of cards to 4 each in each deck
     //Add error message here
     const err = new expressError(
-      'You have already reached the same cards limit in deck(4), cannot add more of the same card',
+      `You have already reached the same cards limit of ${singleCardLimit} cards, cannot add more of the same card`,
       401
     );
     next(err);

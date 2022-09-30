@@ -34,14 +34,15 @@ module.exports.postDeck = async (req, res) => {
       name: req.body.name,
       description: req.body.description,
       likes: req.body.likes,
-      user: id, // Check this one out
+      user: id,
       public: req.body.public,
+      format: req.body.format,
       cards: [],
       sideDecks: [],
       createdDate: Date.now()
     });
     await addedDeck.save(function (err) {
-      if (err) res.send('There was an error!'); //Update with error
+      if (err) res.send('There was an error in the deck creation!');
     });
     const theDecks = await db.Deck.find({ user: id }).populate('user');
     res.send(theDecks); //updated with the new values to populate FE
@@ -56,6 +57,7 @@ module.exports.updateDeck = async (req, res) => {
 
   (deck.name = req.body.name),
     (deck.description = req.body.description),
+    //(deck.format = req.body.format), // Check if deck could be updated later to a different format
     (deck.likes = req.body.likes),
     (deck.public = req.body.public),
     await deck.save();

@@ -6,6 +6,7 @@ const decksSchema = new Schema({
   description: String,
   likes: Number,
   public: Boolean,
+  format: String,
   cards: [{ type: Schema.Types.ObjectId, ref: 'Card' }],
   sideDecks: [{ type: Schema.Types.ObjectId, ref: 'SideDeck' }],
   user: { type: Schema.Types.ObjectId, ref: 'User' },
