@@ -121,7 +121,7 @@ exports.verifyDeckRules = async (req, res, next) => {
     //Add error message here
     const err = new expressError(
       `You have already reached the deck card limit of ${cardLimit} cards. Cannot add more cards!`,
-      401
+      403
     );
     next(err);
     //res.end();
@@ -130,7 +130,7 @@ exports.verifyDeckRules = async (req, res, next) => {
     //Add error message here
     const err = new expressError(
       `You have already reached the same cards limit of ${singleCardLimit} cards, cannot add more of the same card`,
-      401
+      403
     );
     next(err);
     //res.end();
