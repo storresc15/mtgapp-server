@@ -92,8 +92,8 @@ exports.verifyDeckRules = async (req, res, next) => {
   const cardNumber = deck.cards.filter(
     (x) =>
       x.name === card.name &&
-      !x.supertypes.includes('Basic') &&
-      !x.types.includes('Land')
+      !x.supertypes.includes('Basic') /* &&
+      x.types.includes('Land')*/
   ).length;
   //Setting rules
   let cardLimit = 0;
