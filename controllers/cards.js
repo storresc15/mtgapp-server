@@ -43,9 +43,11 @@ module.exports.addCardToDB = async (req, res) => {
 
 module.exports.searchByName = async (req, res) => {
   const { name } = req.params;
-  const products = await mtg.card.where({ name: name });
 
   let cards = [];
+
+  try{
+  const products = await mtg.card.where({ name: name });
 
   for (let i in products) {
     let item = products[i];
@@ -65,6 +67,13 @@ module.exports.searchByName = async (req, res) => {
       });
     }
   }
-
+  } catch(error) {
+    console.log(error);
+    const err = new expressError(
+      `There was an error in the MTG API request, please try again`,
+      500
+    );
+    next(err);
+  }
   res.send(JSON.stringify(cards));
 };
