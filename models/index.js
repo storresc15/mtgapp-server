@@ -14,4 +14,5 @@ mongoose.connect(url, { useNewUrlParser: true, useCreateIndex: true, useUnifiedT
 module.exports.User = require('./user');
 module.exports.Deck = require('./decks');
 module.exports.SideDeck = require('./sideDecks');
+module.exports.Review = require('./reviews');
 module.exports.Card = require('./cards');

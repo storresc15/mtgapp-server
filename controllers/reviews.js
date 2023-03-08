@@ -1,23 +1,19 @@
 const db = require('../models');
 
-module.exports.getDeckReviews = async (req, res) => {
-  const deck = await db.Deck.findById(req.params.id).populate('reviews');
-  const reviews = deck.reviews;
 
-  res.send(JSON.stringify(reviews));
-};
 //Create review
 module.exports.createReview = async (req, res) => {
   const deck = await db.Deck.findById(req.params.id);
   const review = new db.Review();
-  //console.log('The review body' + req.body.body)
+  console.log('The review body: ' + req.body.body)
   review.body = req.body.body;
   review.user = req.user._id;
   deck.reviews.push(review);
   await review.save();
   await deck.save();
 
-  res.send(JSON.stringify(deck.reviews));
+  const reviews = await db.Review.find( { _id : { $in : deck.reviews } } ).populate('user');
+  res.send(JSON.stringify(reviews));
 };
 
 module.exports.editReview = async (req, res) => {
