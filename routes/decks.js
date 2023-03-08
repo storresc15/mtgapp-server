@@ -31,6 +31,8 @@ router
 
 router.get('/:id/sidedecks', verifyUser, decks.getSideDecksFromDeck);
 
+router.get('/:id/reviews', verifyUser, decks.getReviewsFromDeck);
+
 router.post('/:id/cards/remove', verifyUser, isDeckOwner, decks.removeCards);
 
 module.exports = router;

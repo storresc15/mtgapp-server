@@ -58,6 +58,7 @@ app.use(passport.initialize());
 app.use('/users', userRoutes);
 app.use('/cards', cardRoutes);
 app.use('/decks', deckRoutes);
+app.use('/reviews', reviewRoutes);
 app.use('/sets', setRoutes);
 app.get('/', (req, res) => {
   res.json({ message: 'Hello from server!' });

@@ -87,6 +87,14 @@ module.exports.getSideDecksFromDeck = async (req, res) => {
   res.send(JSON.stringify(products));
 };
 
+//Get reviews from Deck
+module.exports.getReviewsFromDeck = async (req, res) => {
+  const deck = await db.Deck.findById(req.params.id);//.populate('reviews');
+  const reviews = await db.Review.find( { _id : { $in : deck.reviews } } ).populate('user');//deck.reviews;
+
+  res.send(JSON.stringify(reviews));
+}
+
 module.exports.postCardToDeck = async (req, res, next) => {
   const { id } = req.params;
   const deck = res.locals.deck; //await db.Deck.findOne({ _id: id }).populate('cards');
